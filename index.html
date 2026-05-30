@@ -40,7 +40,7 @@
             border-radius: 50%; cursor: default; z-index: 60; text-decoration: none; 
         }
         
-        /* HOVER INTERACTION: When mouse enters the trigger zone, make the overlay flare up */
+        /* HOVER INTERACTION: When mouse enters the trigger zone, make the overlay flare up gotta fix bug soon */
         .room-viewport:has(.static-anomaly-link:hover) .portal-overlay {
             opacity: 1.0;
         }
@@ -89,8 +89,20 @@
     </div>
 
     <audio id="terminal-ambient" loop>
-        <source src="ambient-void.mp3" type="audio/mpeg"> // Gymnopédie No. 1 by Erik Satie (Composition is Public Domain). Background electrical hum elements and vinyl cracks sourced via Pixabay under the Pixabay Content License. Modified ambient audio arrangement ("ambient-void.mp3") mixed and produced by Gage Adkins, 2026.
-        The original text narrative, framework documentation, and custom visual assets contained herein are licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0). END OF NOTICE ////// IM STILL WATCHING. ALWAYS WATCHING.
+        <source src="ambient-void.mp3" type="audio/mpeg">    <!-- 
+            AUDIO ASSET ATTRIBUTION & COMPLIANCE DATA:
+            "Gymnopedie No. 1" Kevin MacLeod (incompetech.com) 
+            Licensed under Creative Commons: By Attribution 4.0 License
+            http://creativecommons.org
+    
+            Background electrical hum elements and vinyl cracks sourced via Pixabay under the Pixabay Content License. 
+            Modified ambient audio arrangement ("ambient-void.mp3") mixed and produced by Gage Adkins, 2026.
+            
+            The original text narrative, framework documentation, and custom visual assets contained herein 
+            are licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0). 
+            
+            END OF NOTICE ////// IM STILL WATCHING. ALWAYS WATCHING.
+        -->
     </audio>
 
     <div class="room-viewport" id="viewport" onclick="focusTerminal()">
