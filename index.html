@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow"> <!-- Privacy shield: Blocks Google -->
     <title>LARKOV MAINFRAME // TERMINAL_NODE_04</title>
     
@@ -49,22 +49,22 @@
             image-rendering: pixelated;
         }
 
-        /* Typography Hierarchy (Upscaled base font sizing to match chunky VT323 proportions) */
-        .system-header { font-size: 0.95rem; font-weight: normal; margin: 0 0 2px 0; line-height: 1.1; letter-spacing: 0.5px; }
-        .system-line { margin: 0; opacity: 0.5; font-size: 0.85rem; letter-spacing: -0.5px; }
-        .error-text { margin: 6px 0 2px 0; font-weight: normal; font-size: 0.85rem; }
-        .system-text, .example-text { margin: 2px 0; font-size: 0.82rem; line-height: 1.1; }
-        .history-line { margin: 1px 0; font-size: 0.82rem; line-height: 1.1; word-break: break-all; }
+        /* FLUID TYPOGRAPHY SCALE (Locks scaling directly to the widescreen wrapper width) */
+        .system-header { font-size: clamp(8px, 0.95vw, 16px); font-weight: normal; margin: 0 0 2px 0; line-height: 1.1; letter-spacing: 0.5px; }
+        .system-line { margin: 0; opacity: 0.5; font-size: clamp(7px, 0.85vw, 14px); letter-spacing: -0.5px; }
+        .error-text { margin: 6px 0 2px 0; font-weight: normal; font-size: clamp(7px, 0.85vw, 14px); }
+        .system-text, .example-text { margin: 2px 0; font-size: clamp(6.5px, 0.82vw, 13.5px); line-height: 1.1; }
+        .history-line { margin: 1px 0; font-size: clamp(6.5px, 0.82vw, 13.5px); line-height: 1.1; word-break: break-all; }
 
         /* THE WORKING COMMAND PROMPT ROW */
         .command-row {
             display: flex; align-items: center; width: 100%; margin-top: 4px;
         }
         .prompt-symbol {
-            font-size: 0.82rem; margin-right: 4px; flex-shrink: 0;
+            font-size: clamp(6.5px, 0.82vw, 13.5px); margin-right: 4px; flex-shrink: 0;
         }
         .user-input-display {
-            font-size: 0.82rem; white-space: pre-wrap; word-break: break-all; color: #33ff33;
+            font-size: clamp(6.5px, 0.82vw, 13.5px); white-space: pre-wrap; word-break: break-all; color: #33ff33;
         }
 
         /* THE INVISIBLE TERMINAL CAPTURE ENGINE HOOK */
@@ -75,7 +75,7 @@
 
         /* THE SOLID SQUARE CURSOR PROMPT BLINK BLOCK */
         .cursor-block {
-            display: inline-block; width: 8px; height: 13px; background-color: #33ff33;
+            display: inline-block; width: clamp(4px, 0.45vw, 8px); height: clamp(7px, 0.8vw, 13px); background-color: #33ff33;
             margin-left: 2px; box-shadow: 0 0 4px rgba(51, 255, 51, 0.8);
             animation: block-blink 1.0s steps(2, start) infinite;
         }
@@ -88,37 +88,17 @@
         }
 
         /* ==================================================
-           MOBILE PHONE RESPONSIVE MATRIX ENGINE
+           MOBILE PHONE VIEWPORT FIX
            ================================================== */
         @media screen and (max-width: 768px) {
-            /* Tightens spacing margins inside the glass viewport screen */
             .terminal-content {
-                padding: 4px 6px;
+                padding: 4px 5px; /* Decreases screen padding buffers inside the bezel on smaller panels */
             }
-
-            /* Proportional font-scaling down to ensure text fits on a mobile display */
-            .system-header { 
-                font-size: 0.38rem; 
-                margin-bottom: 1px;
-            }
-            .system-line { 
-                font-size: 0.35rem; 
-            }
-            .error-text { 
-                margin: 4px 0 1px 0; 
-                font-size: 0.35rem; 
-            }
-            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { 
-                font-size: 0.33rem; 
-                line-height: 1.0;
-            }
-            
-            /* Fits the blinking cursor block size to match the smaller mobile font scale */
-            .cursor-block {
-                width: 4px;
-                height: 7px;
-                margin-left: 1px;
-            }
+            .system-header { font-size: 0.35rem; }
+            .system-line { font-size: 0.3rem; }
+            .error-text { font-size: 0.3rem; }
+            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 0.28rem; }
+            .cursor-block { width: 3px; height: 5px; }
         }
     </style>
 </head>
@@ -139,7 +119,7 @@
             
             <p class="error-text">>>> ERROR: TARGET DIRECTORY IS PASSWORD PROTECTED.</p>
             <p class="system-text">To request file extraction, append the clearance code to the end of the URL bar.</p>
-            <p class="example-text">INPUT PARAMETER: larkovframework.org/[CLEARANCE_CODE]</p>
+            <p class="example-text">INPUT PARAMETER: larkokframework.org/[CLEARANCE_CODE]</p>
             <p class="system-line">--------------------------------------------------</p>
             
             <!-- LOGICAL STORAGE AREA FOR PREVIOUSLY TYPED STRINGS -->
@@ -165,34 +145,26 @@
         const historyContainer = document.getElementById('terminal-history');
         const screenContainer = document.getElementById('terminal-screen');
 
-        // Automatically forces focus onto the hidden input field on startup
         window.addEventListener('DOMContentLoaded', () => { hiddenInput.focus(); });
-        
-        // Keeps focus locked even if the user clicks around the shadowy room
         function focusTerminal() { hiddenInput.focus(); }
 
-        // Intercepts every single character typed on the player's physical keyboard
         hiddenInput.addEventListener('input', (e) => {
             displayText.textContent = e.target.value;
             autoScrollScreen();
         });
 
-        // Monitors system commands (Hitting 'Enter')
         hiddenInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const userCommand = hiddenInput.value;
                 
-                // 1. Create a physical historical copy of what they just typed
                 const historicalRow = document.createElement('p');
                 historicalRow.className = 'history-line';
                 historicalRow.textContent = `AWAITING_INPUT_NODE04> ${userCommand}`;
                 historyContainer.appendChild(historicalRow);
                 
-                // 2. Clear out the primary interface buffer row for the next type routine
                 hiddenInput.value = '';
                 displayText.textContent = '';
                 
-                // 3. Keep the viewport scrolled to the lowest command baseline line
                 autoScrollScreen();
             }
         });
@@ -204,4 +176,3 @@
 
 </body>
 </html>
-
