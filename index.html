@@ -145,7 +145,7 @@
             autoScrollScreen();
         });
 
-        hiddenInput.addEventListener('keydown', (e) => {
+               hiddenInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const userCommand = hiddenInput.value.trim();
                 
@@ -158,13 +158,15 @@
                     const historicalRow = document.createElement('p');
                     historicalRow.className = 'history-line';
                     
+                    // Shortened and text-wrapped to guarantee it never cuts off or glitches the screen borders
                     if (userCommand.toLowerCase() === '7143' || userCommand.toLowerCase() === 'help') {
-                        historicalRow.textContent = `AWAITING_INPUT_NODE04> ${userCommand} // TARGET FOUND. USE UPPER ADDRESS BAR PATHWAY.`;
+                        historicalRow.textContent = `NODE04> LINK SYSTEM TO: /7143`;
+                        historicalRow.style.color = '#33ff33';
                     } else if (userCommand.toLowerCase() === 'hello' || userCommand.toLowerCase() === 'who is this') {
-                        historicalRow.textContent = `AWAITING_INPUT_NODE04> ...I CAN SEE YOU WATCHING ME...`;
+                        historicalRow.textContent = `NODE04> I CAN SEE YOU WATCHING.`;
                         historicalRow.style.color = '#ff3333';
                     } else {
-                        historicalRow.textContent = `AWAITING_INPUT_NODE04> ${userCommand} // ACCESS_DENIED`;
+                        historicalRow.textContent = `NODE04> ${userCommand} // DENIED`;
                     }
                     
                     historyContainer.appendChild(historicalRow);
@@ -174,6 +176,8 @@
                 displayText.textContent = '';
                 autoScrollScreen();
             }
+        });
+
         });
 
         function autoScrollScreen() {
