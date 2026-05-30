@@ -3,103 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="robots" content="noindex, nofollow"> <!-- Privacy shield: Blocks Google -->
+    <meta name="robots" content="noindex, nofollow">
     <title>LARKOV MAINFRAME // TERMINAL_NODE_04</title>
     
     <style>
-        /* 1. IMPORT THE PEAK 1980s DEC VT100 CRUNCHY PIXEL FONT */
         @import url('https://googleapis.com');
 
-        /* Standardize viewport setup */
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #050505;
             display: flex; justify-content: center; align-items: center;
             overflow: hidden; font-family: 'VT323', monospace;
-            -webkit-text-size-adjust: none; /* CRITICAL MECHANIC: Completely bans iPhones from altering text sizes */
-            text-size-adjust: none;         /* CRITICAL MECHANIC: Completely bans Androids from altering text sizes */
+            -webkit-text-size-adjust: none;
+            text-size-adjust: none;
         }
 
-        /* 3D SCENE CANVAS WRAPPER (Loads your exact room layout) */
         .room-viewport {
             width: 100vw; height: 56.25vw; max-height: 100vh; max-width: 177.78vh;
             background: url('ROOM-LF.png') no-repeat center center;
             background-size: contain; position: relative; box-sizing: border-box;
         }
 
-        /* THE LIVE TEXT CONTAINER (Precision micro-adjusted right for your bezel) */
         .terminal-content {
             position: absolute;
             top: 36.5%;     
             left: 36.4%;    
             width: 27.2%;   
             height: 31.0%;  
-            
-            /* DYNAMIC SCALED PADDING BUFFER FOR SMARTPHONES */
             padding: 0.6vw 0.8vw; 
             box-sizing: border-box; 
-            
             display: flex; flex-direction: column; justify-content: flex-start;
             overflow-y: hidden; 
-            
-            /* CRT Text Textures: Phosphor Green, Ambient Glow, and Horizontal Scanlines */
             color: #33ff33;
             text-shadow: 0 0 4px rgba(51, 255, 51, 0.85), 0 0 10px rgba(51, 255, 51, 0.4);
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
             background-size: 100% 4px;
-
-            /* FORCE RAW ALIASED RUGGED PIXELS (Completely cuts off modern font smoothing) */
             font-smooth: never; -webkit-font-smoothing: none; -moz-osx-font-smoothing: grayscale;
             image-rendering: pixelated;
         }
 
-        /* ABSOLUTE CONTAINER SCALING LOGIC (Forces text to stay micro-sized on mobile screens) */
         .system-header { font-size: 0.9vw; font-weight: normal; margin: 0 0 2px 0; line-height: 1.1; letter-spacing: 0.5px; }
         .system-line { margin: 0; opacity: 0.5; font-size: 0.8vw; letter-spacing: -0.5px; }
         .error-text { margin: 5px 0 2px 0; font-weight: normal; font-size: 0.8vw; }
         .system-text, .example-text { margin: 1px 0; font-size: 0.75vw; line-height: 1.1; }
         .history-line { margin: 1px 0; font-size: 0.75vw; line-height: 1.1; word-break: break-all; }
 
-        /* THE WORKING COMMAND PROMPT ROW */
         .command-row {
             display: flex; align-items: center; width: 100%; margin-top: 3px;
         }
-        .prompt-symbol {
-            font-size: 0.75vw; margin-right: 4px; flex-shrink: 0;
-        }
-        .user-input-display {
-            font-size: 0.75vw; white-space: pre-wrap; word-break: break-all; color: #33ff33;
-        }
+        .prompt-symbol { font-size: 0.75vw; margin-right: 4px; flex-shrink: 0; }
+        .user-input-display { font-size: 0.75vw; white-space: pre-wrap; word-break: break-all; color: #33ff33; }
 
-        /* THE SOLID SQUARE CURSOR PROMPT BLINK BLOCK */
         .cursor-block {
-            display: inline-block; width: 0.4vw; height: 0.75vw; background-color: #33ff33;
+            display: inline-block; width: 0.4vw; height: 0.7vw; background-color: #33ff33;
             margin-left: 1px; box-shadow: 0 0 4px rgba(51, 255, 51, 0.8);
             animation: block-blink 1.0s steps(2, start) infinite;
         }
         @keyframes block-blink { to { visibility: hidden; } }
 
-        /* THE INVISIBLE TERMINAL CAPTURE ENGINE HOOK */
         #hidden-terminal-input {
             position: absolute; opacity: 0; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; cursor: default;
         }
 
-        /* THE INVISIBLE ANOMALY PORTAL (Left side static patch link) */
         .static-anomaly-link {
             position: absolute; top: 33.5%; left: 11.0%; width: 9.5%; height: 18.0%;
             border-radius: 40%; cursor: default; z-index: 15; text-decoration: none;
         }
 
-        /* ==================================================
-           MAX MAXIMUM SCREEN BOUNDARY LOCK FOR BIG MONITORS
-           ================================================== */
+        @media screen and (max-width: 932px) and (orientation: landscape) {
+            .room-viewport {
+                width: 177.78vh;
+                height: 100vh;
+            }
+            .terminal-content { padding: 0.6vh 0.8vh; }
+            .system-header { font-size: 0.9vh; }
+            .system-line { font-size: 0.8vh; }
+            .error-text { font-size: 0.8vh; }
+            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 0.75vh; }
+            .cursor-block { width: 0.4vh; height: 0.7vh; }
+        }
+
         @media screen and (min-width: 1600px) {
             .system-header { font-size: 15px; }
             .system-line { font-size: 13px; }
             .error-text { font-size: 13px; }
             .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 12px; }
-            .cursor-block { width: 7px; height: 12px; }
+            .cursor-block { width: 7px; height: 11px; }
         }
     </style>
 </head>
@@ -107,26 +97,21 @@
 
     <div class="room-viewport" onclick="focusTerminal()">
         
-        <!-- INVISIBLE ANOMALY PORTAL LINK -->
         <a href="anomaly-7143.html" class="static-anomaly-link" title="SYSTEM FAULT"></a>
 
-        <!-- THE ACTIVE CRT TEXT ENVIRONMENT -->
         <div class="terminal-content" id="terminal-screen">
-            <!-- STATIC ARCHIVAL TOP BANNER LOGS -->
             <p class="system-line">==================================================</p>
-            <h1 class="system-header">LATENT ANOMALY RESEARCH AND KINETIC OPERATIONS VECTOR</h1>
+            <h1 class="system-header">LATENT ANOMALY RESEARCH AND KINETIC OPERATIONS KERNEL</h1>
             <p class="system-line">SYSTEM STATUS: [SECURE_NODE_04_ACTIVE]</p>
             <p class="system-line">==================================================</p>
             
-            <p class="error-text">>>> ERROR: TARGET DIRECTORY IS PASSWORD PROTECTED.</p>
-            <p class="system-text">To request file extraction, append the clearance code to the end of the URL bar.</p>
+            <p class="error-text" style="color: #ff3333;">>>> ANP ALERT: LOGOUT OVERRIDE DETECTED. DO NOT BLINK.</p>
+            <p class="system-text">Target parameters locked. Clearance authentication required to disrupt local transmission loop.</p>
             <p class="example-text">INPUT PARAMETER: larkokframework.org/[CLEARANCE_CODE]</p>
             <p class="system-line">--------------------------------------------------</p>
             
-            <!-- LOGICAL STORAGE AREA FOR PREVIOUSLY TYPED STRINGS -->
             <div id="terminal-history"></div>
 
-            <!-- THE WORKING LINE THAT CAPTURES KEYBOARD INPUTS -->
             <div class="command-row">
                 <span class="prompt-symbol">AWAITING_INPUT_NODE04></span>
                 <span class="user-input-display" id="display-text"></span>
@@ -134,38 +119,59 @@
             </div>
         </div>
 
-        <!-- THE HIDDEN INPUT CORE FORM FIELD -->
         <input type="text" id="hidden-terminal-input" autocomplete="off" autofocus>
         
     </div>
 
-    <!-- 1987 VANILLA JAVASCRIPT KEYBOARD MATRIX INTERCEPT LOGIC -->
     <script>
         const hiddenInput = document.getElementById('hidden-terminal-input');
         const displayText = document.getElementById('display-text');
         const historyContainer = document.getElementById('terminal-history');
         const screenContainer = document.getElementById('terminal-screen');
 
+        hiddenInput.setAttribute('maxlength', '40');
+
+        hiddenInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+        });
+
         window.addEventListener('DOMContentLoaded', () => { hiddenInput.focus(); });
         function focusTerminal() { hiddenInput.focus(); }
 
         hiddenInput.addEventListener('input', (e) => {
-            displayText.textContent = e.target.value;
+            let sanitizedValue = e.target.value.replace(/[<>]/g, '');
+            hiddenInput.value = sanitizedValue;
+            displayText.textContent = sanitizedValue;
             autoScrollScreen();
         });
 
         hiddenInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-                const userCommand = hiddenInput.value;
+                const userCommand = hiddenInput.value.trim();
                 
-                const historicalRow = document.createElement('p');
-                historicalRow.className = 'history-line';
-                historicalRow.textContent = `AWAITING_INPUT_NODE04> ${userCommand}`;
-                historyContainer.appendChild(historicalRow);
+                if (userCommand === '') {
+                    const blankRow = document.createElement('p');
+                    blankRow.className = 'history-line';
+                    blankRow.textContent = `AWAITING_INPUT_NODE04>`;
+                    historyContainer.appendChild(blankRow);
+                } else {
+                    const historicalRow = document.createElement('p');
+                    historicalRow.className = 'history-line';
+                    
+                    if (userCommand.toLowerCase() === '7143' || userCommand.toLowerCase() === 'help') {
+                        historicalRow.textContent = `AWAITING_INPUT_NODE04> ${userCommand} // TARGET FOUND. USE UPPER ADDRESS BAR PATHWAY.`;
+                    } else if (userCommand.toLowerCase() === 'hello' || userCommand.toLowerCase() === 'who is this') {
+                        historicalRow.textContent = `AWAITING_INPUT_NODE04> ...I CAN SEE YOU WATCHING ME...`;
+                        historicalRow.style.color = '#ff3333';
+                    } else {
+                        historicalRow.textContent = `AWAITING_INPUT_NODE04> ${userCommand} // ACCESS_DENIED`;
+                    }
+                    
+                    historyContainer.appendChild(historicalRow);
+                }
                 
                 hiddenInput.value = '';
                 displayText.textContent = '';
-                
                 autoScrollScreen();
             }
         });
