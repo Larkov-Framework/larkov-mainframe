@@ -6,7 +6,6 @@
     <meta name="robots" content="noindex, nofollow">
     <title>LARKOV MAINFRAME // TERMINAL_NODE_04</title>
     <style>
-        /* Corrected path to ensure VT323 rendering across browsers */
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
         html, body {
@@ -21,7 +20,32 @@
             background: url('ROOM-LF.png') no-repeat center center;
             background-size: contain; position: relative; box-sizing: border-box; cursor: default;
         }
-        /* CRITICAL CONSTRAINTS - DO NOT ALTER */
+
+        /* THE TRANSPARENT PORTAL OVERLAY: Full-screen background coverage */
+        .portal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('ROOM-LF(SWIRL).png') no-repeat center center;
+            background-size: contain;
+            opacity: 0; /* Invisible by default */
+            pointer-events: none; /* Prevents it from blocking mouse clicks */
+            transition: opacity 0.1s ease-in-out;
+            z-index: 55;
+        }
+
+        /* PORTAL TRIGGER ZONE: Confined specifically to the left wall boundary */
+        .static-anomaly-link { 
+            position: absolute; 
+            top: 25.0%; left: 3.0%; width: 24.5%; height: 50.0%; 
+            border-radius: 50%; cursor: default; z-index: 60; text-decoration: none; 
+        }
+        
+        /* HOVER INTERACTION: When mouse enters the trigger zone, make the overlay flare up */
+        .room-viewport:has(.static-anomaly-link:hover) .portal-overlay {
+            opacity: 1.0;
+        }
+
+        /* CRITICAL CONSTRAINTS - DO NOT ALTER FIXED COORDINATES */
         .terminal-content {
             position: absolute; top: 36.5%; left: 36.4%; width: 27.2%; height: 31.0%;  
             padding: 0.6vw 0.8vw; box-sizing: border-box; 
@@ -30,47 +54,56 @@
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px;
             font-smooth: never; -webkit-font-smoothing: none; -moz-osx-font-smoothing: grayscale; image-rendering: pixelated;
         }
-        .system-header { font-size: 0.9vw; font-weight: normal; margin: 0 0 2px 0; line-height: 1.1; letter-spacing: 0.5px; }
-        .system-line { margin: 0; opacity: 0.5; font-size: 0.8vw; letter-spacing: -0.5px; }
-        .error-text { margin: 5px 0 2px 0; font-weight: normal; font-size: 0.8vw; }
-        .system-text, .example-text { margin: 1px 0; font-size: 0.75vw; line-height: 1.1; }
-        .history-line { margin: 1px 0; font-size: 0.75vw; line-height: 1.1; word-break: break-all; }
+        .system-header { font-size: 1.1vw; font-weight: normal; margin: 0 0 2px 0; line-height: 1.1; letter-spacing: 0.5px; }
+        .system-line { margin: 0; opacity: 0.5; font-size: 1.0vw; letter-spacing: -0.5px; }
+        .error-text { margin: 5px 0 2px 0; font-weight: normal; font-size: 1.0vw; }
+        .system-text, .example-text { margin: 1px 0; font-size: 0.9vw; line-height: 1.1; }
+        .history-line { margin: 1px 0; font-size: 0.9vw; line-height: 1.1; word-break: break-all; }
         .command-row { display: flex; align-items: center; width: 100%; margin-top: 3px; }
-        .prompt-symbol { font-size: 0.75vw; margin-right: 4px; flex-shrink: 0; }
-        .user-input-display { font-size: 0.75vw; white-space: pre-wrap; word-break: break-all; color: #33ff33; }
+        .prompt-symbol { font-size: 0.9vw; margin-right: 4px; flex-shrink: 0; }
+        .user-input-display { font-size: 0.9vw; white-space: pre-wrap; word-break: break-all; color: #33ff33; }
         .cursor-block {
-            display: inline-block; width: 0.4vw; height: 0.7vw; background-color: #33ff33;
+            display: inline-block; width: 0.5vw; height: 0.8vw; background-color: #33ff33;
             margin-left: 1px; box-shadow: 0 0 4px rgba(51, 255, 51, 0.8); animation: block-blink 1.0s steps(2, start) infinite;
         }
         @keyframes block-blink { to { visibility: hidden; } }
         #hidden-terminal-input { position: absolute; opacity: 0; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; cursor: default; }
         
-        /* PORTAL CONSTRAINT - DO NOT ALTER */
-        .static-anomaly-link { position: absolute; top: 33.5%; left: 11.0%; width: 9.5%; height: 18.0%; border-radius: 40%; cursor: default; z-index: 60; text-decoration: none; }
-        
         @media screen and (max-width: 932px) and (orientation: landscape) {
             .room-viewport { width: 177.78vh; height: 100vh; }
             .terminal-content { padding: 0.6vh 0.8vh; }
-            .system-header { font-size: 0.9vh; } .system-line { font-size: 0.8vh; } .error-text { font-size: 0.8vh; }
-            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 0.75vh; }
-            .cursor-block { width: 0.4vh; height: 0.7vh; }
+            .system-header { font-size: 1.1vh; } .system-line { font-size: 1.0vh; } .error-text { font-size: 1.0vh; }
+            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 0.9vh; }
+            .cursor-block { width: 0.5vh; height: 0.8vh; }
         }
         @media screen and (min-width: 1600px) {
-            .system-header { font-size: 15px; } .system-line { font-size: 13px; } .error-text { font-size: 13px; }
-            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 12px; }
-            .cursor-block { width: 7px; height: 11px; }
+            .system-header { font-size: 18px; } .system-line { font-size: 16px; } .error-text { font-size: 16px; }
+            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 15px; }
+            .cursor-block { width: 9px; height: 13px; }
         }
     </style>
 </head>
 <body>
-    <div class="room-viewport" onclick="focusTerminal()">
-        <a href="anomaly-7143.html" class="static-anomaly-link" title="SYSTEM FAULT"></a>
+    <div style="position: absolute; width: 0; height: 0; overflow: hidden; z-index: -1;">
+        <img src="ROOM-LF(SWIRL).png" alt="">
+    </div>
+
+    <audio id="terminal-ambient" loop>
+        <source src="ambient-void.mp3" type="audio/mpeg"> // Gymnopédie No. 1 by Erik Satie (Composition is Public Domain). Background electrical hum elements and vinyl cracks sourced via Pixabay under the Pixabay Content License. Modified ambient audio arrangement ("ambient-void.mp3") mixed and produced by Gage Adkins, 2026.
+        The original text narrative, framework documentation, and custom visual assets contained herein are licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0). END OF NOTICE ////// IM STILL WATCHING. ALWAYS WATCHING.
+    </audio>
+
+    <div class="room-viewport" id="viewport" onclick="focusTerminal()">
+        <div class="portal-overlay"></div>
+        
+        <a href="anomaly-7143.html" class="static-anomaly-link" title="???"></a>
+        
         <div class="terminal-content" id="terminal-screen">
             <p class="system-line">==================================================</p>
             <h1 class="system-header">LATENT ANOMALY RESEARCH AND KINETIC OPERATIONS KERNEL</h1>
             <p class="system-line">SYSTEM STATUS: [SECURE_NODE_04_ACTIVE]</p>
             <p class="system-line">==================================================</p>
-            <p class="error-text" style="color: #ff3333;">>>> ANP ALERT: LOGOUT OVERRIDE DETECTED. DO NOT BLINK.</p>
+            <p class="error-text" style="color: #ff3333;">>>> ANP ALERT: LOGOUT OVERRIDE DETECTED.</p>
             <p class="system-text">Target parameters locked. Clearance authentication required to disrupt local transmission loop.</p>
             <p class="example-text">INPUT PARAMETER: larkovframework.org/[CLEARANCE_CODE]</p>
             <p class="system-line">--------------------------------------------------</p>
@@ -88,6 +121,8 @@
         const displayText = document.getElementById('display-text');
         const historyContainer = document.getElementById('terminal-history');
         const screenContainer = document.getElementById('terminal-screen');
+        const ambientAudio = document.getElementById('terminal-ambient');
+        const viewport = document.getElementById('viewport');
         
         hiddenInput.setAttribute('maxlength', '40');
         hiddenInput.addEventListener('paste', (e) => { e.preventDefault(); });
@@ -98,6 +133,15 @@
             hiddenInput.focus(); 
             document.addEventListener('click', () => { hiddenInput.focus(); });
         });
+
+        function initAudioFeed() {
+            ambientAudio.volume = 0.70;
+            ambientAudio.play().catch(err => {
+                console.log("Audio pipeline sync failure: ", err);
+            });
+            viewport.removeEventListener('click', initAudioFeed);
+        }
+        viewport.addEventListener('click', initAudioFeed);
         
         hiddenInput.addEventListener('input', (e) => {
             let sanitizedValue = e.target.value.replace(/[<>]/g, '');
@@ -116,9 +160,9 @@
                     historicalRow.className = 'history-line';
                     const lowerCmd = userCommand.toLowerCase();
                     
-                    // Comprehensive slang greetings filter
-                    const greetings = ['hi', 'hello', 'hey', 'sup', 'wassup', 'whats up'];
-                    const isGreeting = greetings.some(greet => lowerCmd.includes(greet));
+                    const collapsedCmd = lowerCmd.replace(/(.)\1+/g, '$1');
+                    const baseGreetings = ['hi', 'helo', 'hey', 'sup', 'wasup', 'whats up', 'wats up'];
+                    const isGreeting = baseGreetings.some(greet => collapsedCmd.includes(greet)) || lowerCmd.startsWith('h');
                     
                     if (lowerCmd === '7143' || lowerCmd === 'help') {
                         historicalRow.textContent = `NODE04> LINK SYSTEM TO: /7143`;
