@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background-color: #050505;
+    display: flex; justify-content: center;
+    align-items: center;
+    overflow: hidden; font-family: 'VT323', monospace;
+    -webkit-text-size-adjust: none; text-size-adjust: none;
+}
+
+/* CRT SCANLINE OVERLAY */
+.crt-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.5) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.1), rgba(0, 255, 0, 0.05), rgba(0, 0, 255, 0.1));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none; z-index: 9999; opacity: 1.0;
+}
+
+#splash-screen {
+    position: fixed; top: 0;
+    left: 0; width: 100vw; height: 100vh;
+    background-color: #050505; z-index: 100;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    transition: opacity 0.5s ease-out;
+}
+.login-box {
+    text-align: center; border: 2px dashed #33ff33; padding: 2vw 4vw;
+    background: rgba(18, 16, 16, 0.9); box-shadow: 0 0 15px rgba(51, 255, 51, 0.2);
+}
+.splash-title {
+    color: #33ff33;
+    font-size: 2.2vw; margin: 0 0 1.5vw 0;
+    text-shadow: 0 0 5px rgba(51, 255, 51, 0.8); letter-spacing: 1px;
+}
+.shift-btn {
+    background: #33ff33; color: #050505; border: none;
+    font-family: 'VT323', monospace; font-size: 1.8vw; padding: 0.5vw 2vw;
+    cursor: pointer; font-weight: bold; text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(51, 255, 51, 0.5); transition: background 0.2s, transform 0.1s;
+}
+.shift-btn:hover { background: #22cc22; }
+.shift-btn:active { transform: scale(0.95); }
+.shift-btn:focus { outline: none; }
+
+.viewport-container {
+    position: relative;
+    width: 100vw; height: 56.25vw;
+    max-width: 177.78vh; max-height: 100vh;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.room-viewport {
+    width: 100%; height: 100%;
+    background: url('ROOM-LF.png') no-repeat center center;
+    background-size: 100% 100%;
+    position: relative;
+    box-sizing: border-box; cursor: default;
+    transition: background-image 0.1s ease-in-out;
+    background-repeat: no-repeat;
+}
+
+.portal-overlay {
+    position: absolute; top: 0;
+    left: 0; width: 100%; height: 100%;
+    background: url('ROOM-LF(SWIRL).png') no-repeat center center;
+    background-size: 100% 100%; opacity: 0; pointer-events: none;
+    transition: opacity 0.1s ease-in-out; z-index: 55;
+}
+
+.static-anomaly-link { 
+    position: absolute; 
+    top: 37%;    
+    left: 9%;    
+    width: 15%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%; 
+    cursor: default; 
+    z-index: 60; 
+    text-decoration: none; 
+}
+.static-anomaly-link:focus { outline: none !important; box-shadow: none !important; }
+.room-viewport:has(.static-anomaly-link:hover) .portal-overlay { opacity: 1.0; }
+
+.terminal-content {
+    position: absolute; 
+    top: 36.5%; left: 36.4%; 
+    width: 27.2%; height: 31.0%;
+    padding: 0.6vw 0.8vw;
+    box-sizing: border-box; 
+    display: flex; flex-direction: column; 
+    color: #33ff33;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); 
+    background-size: 100% 4px;
+    overflow: visible !important;
+}
+
+.terminal-scroll-area {
+    width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; 
+    display: flex; flex-direction: column; scrollbar-width: none;
+}
+.terminal-scroll-area::-webkit-scrollbar { display: none; }
+
+.system-header { font-size: 0.95vw; font-weight: normal; margin: 0 0 1px 0; line-height: 1.0; letter-spacing: 0.1px; text-transform: uppercase; }
+.system-line { margin: 0; opacity: 0.4; font-size: 0.85vw; letter-spacing: -0.5px; line-height: 0.9; }
+.error-text { margin: 2px 0 1px 0; font-weight: normal; font-size: 0.85vw; line-height: 1.0; }
+.system-text, .example-text { margin: 1px 0; font-size: 0.8vw; line-height: 1.0; }
+
+#terminal-history { width: 100%; }
+.history-line { margin: 1px 0; font-size: 0.8vw; line-height: 1.0; word-break: break-all; }
+
+.command-row { 
+    display: flex; align-items: center; width: 100%; height: 1.5vw;
+    margin-top: 2px; flex-shrink: 0; background: transparent;
+    box-sizing: border-box;
+}
+.prompt-symbol { font-size: 0.8vw; margin-right: 3px; flex-shrink: 0; }
+.user-input-display { font-size: 0.8vw; white-space: pre-wrap; word-break: break-all; color: #33ff33; }
+
+.cursor-block {
+    display: inline-block; width: 0.35vw; height: 0.65vw; background-color: #33ff33;
+    margin-left: 1px;
+    box-shadow: 0 0 4px rgba(51, 255, 51, 0.8); animation: block-blink 1.0s steps(2, start) infinite;
+}
+@keyframes block-blink { to { visibility: hidden; } }
+#hidden-terminal-input { position: absolute; opacity: 0; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; cursor: default; }
+
+/* RE-BALANCED EXTENDED CUSTOM TARGET INTERACTION OVERLAYS */
+.sticky-note-hotspot {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%; z-index: 65; cursor: pointer;
+    clip-path: polygon(21% 31%, 21% 30%, 21% 28%, 21% 22%, 21% 21%, 20% 20%, 17% 20%, 14% 19%, 14% 26%, 15% 27%, 14% 30%, 15% 31%, 15% 33%, 18% 33%, 20% 32%);
+    background: rgba(255, 255, 255, 0.3); transition: background 0.2s ease;
+}
+.sticky-note-hotspot:hover { background: rgba(255, 255, 255, 0.5); }
+
+/* --- STICKY NOTE CSS REBUILT --- */
+.sticky-note-wrapper {
+    position: absolute;
+    top: 21%;
+    left: 14%;
+    width: 8%;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    overflow: visible !important;
+}
+
+.sticky-note-wrapper:hover {
+    opacity: 1;
+}
+
+.sticky-note {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;            
+    height: 100%;
+    pointer-events: none;
+    overflow: visible !important;
+    opacity: 1;
+    z-index: 9999;
+}
+.sticky-note-wrapper:hover .glow-path {
+    stroke-width: 4;
+}
+.glow-path {
+    filter: url(#neon-glow);
+    transition: all 0.3s ease;
+}
+.sticky-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 10000;
+}
+.modal-content { 
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #00ff00; 
+    font-family: monospace;
+}
+
+#task-title {
+    position: absolute;
+    top: 29.5%;                 
+    left: 40%;
+    color: #ffa9a9;         
+    font-family: 'Architects Daughter', cursive, sans-serif;
+    font-size: 28px;          
+    font-weight: bold;
+    text-transform: uppercase;
+    pointer-events: none;
+    transform: rotate(-1.5deg);  
+    letter-spacing: 2px;         
+    opacity: 0.9;
+}
+
+#task-list {
+    position: absolute;
+    top: 35.5%;              
+    left: 24%;              
+    width: 70%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #ffffff;         
+    font-family: 'Architects Daughter', cursive, sans-serif; 
+    font-size: 18px;
+    text-transform: uppercase;
+    pointer-events: none;
+    transform: rotate(-1.5deg);  
+    letter-spacing: 1px;
+    opacity: 0.60;
+}
+
+.hidden { display: none; }
+/* ------------------------------- */
+
+@media screen and (max-width: 932px) and (orientation: landscape) {
+    .viewport-container { width: 177.78vh; height: 100vh; }
+    .terminal-content { padding: 0.4vh 0.6vh; }
+    .splash-title { font-size: 2.2vh; } 
+    .shift-btn { font-size: 1.8vh; padding: 0.5vh 2vh; }
+    .system-header { font-size: 0.95vh; } 
+    .system-line, .error-text { font-size: 0.85vh; }
+    .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 0.8vh; }
+    .cursor-block { width: 0.35vh; height: 0.65vh; }
+}
+
+@media screen and (min-width: 1600px) {
+    .splash-title { font-size: 32px; } 
+    .shift-btn { font-size: 24px; }
+    .system-header { font-size: 15px; } 
+    .system-line, .error-text { font-size: 14px; }
+    .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 13px; }
+    .cursor-block { width: 6px; height: 12px; }
+}
+
+.jumping-text {
+    position: absolute; top: 85%;
+    width: 100%; text-align: center; color: #ff3333;
+    font-size: 4vw; z-index: 200; pointer-events: auto; cursor: pointer;
+}
+.jumping-text span { display: inline-block; animation: jump 2.0s infinite; }
+@keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+.completed {
+    text-decoration: line-through;
+    text-decoration-color: #ff0000;
+    opacity: 0.8 !important;
+}
