@@ -1,197 +1,106 @@
+<!-- AUDIO ASSET ATTRIBUTION & COMPLIANCE DATA: 
+    "Gymnopedie No. 1" Kevin MacLeod (incompetech.com) 
+    Licensed under Creative Commons: By Attribution 4.0 License
+    https://creativecommons.org
+
+    Audio elements sourced via Pixabay under the Pixabay Content License. 
+    Modified ambient audio arrangement ("ambient-void.mp3") mixed and produced by Gage Adkins, 2026.
+    
+    The original text narrative, framework documentation, and custom visual assets contained herein 
+    are Copyright © 2026 Gage Adkins. All rights reserved. 
+    
+    FAN CONTENT NOTE: Original fan art, video essays, and lore discussions are highly, HIGHLY encouraged 
+    and may be monetized, provided you do not re-upload my uncut videos or mirror whole websites! Peace and love <3.
+    
+    END OF SYSTEM CONSOLE LOG ////// IM STILL WATCHING. ALWAYS WATCHING.
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="robots" content="noindex, nofollow">
     <title>LARKOV MAINFRAME // TERMINAL_NODE_04</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-        
-        html, body {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #050505;
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; font-family: 'VT323', monospace;
-            -webkit-text-size-adjust: none; text-size-adjust: none;
-        }
-        .room-viewport {
-            width: 100vw; height: 56.25vw; max-height: 100vh; max-width: 177.78vh;
-            background: url('ROOM-LF.png') no-repeat center center;
-            background-size: contain; position: relative; box-sizing: border-box; cursor: default;
-        }
-
-        /* THE TRANSPARENT PORTAL OVERLAY: Full-screen background coverage */
-        .portal-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('ROOM-LF(SWIRL).png') no-repeat center center;
-            background-size: contain;
-            opacity: 0; /* Invisible by default */
-            pointer-events: none; /* Prevents it from blocking mouse clicks */
-            transition: opacity 0.1s ease-in-out;
-            z-index: 55;
-        }
-
-        /* PORTAL TRIGGER ZONE: Confined specifically to the left wall boundary */
-        .static-anomaly-link { 
-            position: absolute; 
-            top: 25.0%; left: 3.0%; width: 24.5%; height: 50.0%; 
-            border-radius: 50%; cursor: default; z-index: 60; text-decoration: none; 
-        }
-        
-        /* HOVER INTERACTION: When mouse enters the trigger zone, make the overlay flare up gotta fix bug soon */
-        .room-viewport:has(.static-anomaly-link:hover) .portal-overlay {
-            opacity: 1.0;
-        }
-
-        /* CRITICAL CONSTRAINTS - DO NOT ALTER FIXED COORDINATES */
-        .terminal-content {
-            position: absolute; top: 36.5%; left: 36.4%; width: 27.2%; height: 31.0%;  
-            padding: 0.6vw 0.8vw; box-sizing: border-box; 
-            display: flex; flex-direction: column; justify-content: flex-start; overflow-y: hidden; 
-            color: #33ff33; text-shadow: 0 0 4px rgba(51, 255, 51, 0.85), 0 0 10px rgba(51, 255, 51, 0.4);
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px;
-            font-smooth: never; -webkit-font-smoothing: none; -moz-osx-font-smoothing: grayscale; image-rendering: pixelated;
-        }
-        .system-header { font-size: 1.1vw; font-weight: normal; margin: 0 0 2px 0; line-height: 1.1; letter-spacing: 0.5px; }
-        .system-line { margin: 0; opacity: 0.5; font-size: 1.0vw; letter-spacing: -0.5px; }
-        .error-text { margin: 5px 0 2px 0; font-weight: normal; font-size: 1.0vw; }
-        .system-text, .example-text { margin: 1px 0; font-size: 0.9vw; line-height: 1.1; }
-        .history-line { margin: 1px 0; font-size: 0.9vw; line-height: 1.1; word-break: break-all; }
-        .command-row { display: flex; align-items: center; width: 100%; margin-top: 3px; }
-        .prompt-symbol { font-size: 0.9vw; margin-right: 4px; flex-shrink: 0; }
-        .user-input-display { font-size: 0.9vw; white-space: pre-wrap; word-break: break-all; color: #33ff33; }
-        .cursor-block {
-            display: inline-block; width: 0.5vw; height: 0.8vw; background-color: #33ff33;
-            margin-left: 1px; box-shadow: 0 0 4px rgba(51, 255, 51, 0.8); animation: block-blink 1.0s steps(2, start) infinite;
-        }
-        @keyframes block-blink { to { visibility: hidden; } }
-        #hidden-terminal-input { position: absolute; opacity: 0; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; cursor: default; }
-        
-        @media screen and (max-width: 932px) and (orientation: landscape) {
-            .room-viewport { width: 177.78vh; height: 100vh; }
-            .terminal-content { padding: 0.6vh 0.8vh; }
-            .system-header { font-size: 1.1vh; } .system-line { font-size: 1.0vh; } .error-text { font-size: 1.0vh; }
-            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 0.9vh; }
-            .cursor-block { width: 0.5vh; height: 0.8vh; }
-        }
-        @media screen and (min-width: 1600px) {
-            .system-header { font-size: 18px; } .system-line { font-size: 16px; } .error-text { font-size: 16px; }
-            .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 15px; }
-            .cursor-block { width: 9px; height: 13px; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div style="position: absolute; width: 0; height: 0; overflow: hidden; z-index: -1;">
-        <img src="ROOM-LF(SWIRL).png" alt="">
+    <div id="splash-screen">
+        <div class="login-box">
+            <h2 class="splash-title">LARKOV PRIMARY CONTROL NODE v4.01</h2>
+            <button class="shift-btn" id="start-shift-trigger">BEGIN SHIFT</button>
+        </div>
     </div>
 
     <audio id="terminal-ambient" loop>
-        <source src="ambient-void.mp3" type="audio/mpeg">    <!-- 
-            AUDIO ASSET ATTRIBUTION & COMPLIANCE DATA:
-            "Gymnopedie No. 1" Kevin MacLeod (incompetech.com) 
-            Licensed under Creative Commons: By Attribution 4.0 License
-            http://creativecommons.org
-    
-            Background electrical hum elements and vinyl cracks sourced via Pixabay under the Pixabay Content License. 
-            Modified ambient audio arrangement ("ambient-void.mp3") mixed and produced by Gage Adkins, 2026.
-            
-            The original text narrative, framework documentation, and custom visual assets contained herein 
-            are licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0). 
-            
-            END OF NOTICE ////// IM STILL WATCHING. ALWAYS WATCHING.
-        -->
+        <source src="ambient-void.mp3" type="audio/mpeg">
     </audio>
-
-    <div class="room-viewport" id="viewport" onclick="focusTerminal()">
-        <div class="portal-overlay"></div>
-        
-        <a href="anomaly-7143.html" class="static-anomaly-link" title="???"></a>
-        
-        <div class="terminal-content" id="terminal-screen">
-            <p class="system-line">==================================================</p>
-            <h1 class="system-header">LATENT ANOMALY RESEARCH AND KINETIC OPERATIONS KERNEL</h1>
-            <p class="system-line">SYSTEM STATUS: [SECURE_NODE_04_ACTIVE]</p>
-            <p class="system-line">==================================================</p>
-            <p class="error-text" style="color: #ff3333;">>>> ANP ALERT: LOGOUT OVERRIDE DETECTED.</p>
-            <p class="system-text">Target parameters locked. Clearance authentication required to disrupt local transmission loop.</p>
-            <p class="example-text">INPUT PARAMETER: larkovframework.org/[CLEARANCE_CODE]</p>
-            <p class="system-line">--------------------------------------------------</p>
-            <div id="terminal-history"></div>
-            <div class="command-row">
-                <span class="prompt-symbol">AWAITING_INPUT_NODE04></span>
-                <span class="user-input-display" id="display-text"></span>
-                <span class="cursor-block"></span>
+    
+    <div class="viewport-container">
+        <div class="room-viewport" id="viewport">
+            <div class="portal-overlay"></div>
+            <a href="anomaly-7143.html" class="static-anomaly-link" title="???"></a>
+            
+            <div class="sticky-note-wrapper">
+                <svg class="sticky-note" viewBox="270 230 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <filter id="neon-glow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    
+                    <path class="glow-path" d="M 275.835 308.294 L 275.812 235.738 M 275.812 235.738 L 316.123 236.07 M 316.148 239.713 L 316.135 236.08 M 344.381 239.704 L 316.201 239.742 M 360.181 239.807 L 344.381 239.704 M 360.183 239.807 L 360.18 243.65 M 396.34 243.718 L 360.177 243.649 M 396.367 247.781 L 396.341 243.712 M 407.984 247.724 L 396.37 247.774 M 408.029 252.224 L 407.995 247.717 M 408.029 252.207 L 399.897 252.282 M 399.916 252.224 L 399.978 255.892 M 396.334 255.935 L 399.967 255.903 M 396.334 255.935 L 396.345 259.6 M 396.341 259.599 L 407.916 259.651 M 407.91 259.633 L 408.011 307.592 M 408.011 307.592 L 412.233 307.551 M 412.246 307.524 L 412.182 340.121 M 412.184 340.118 L 408.21 340.164 M 408.191 340.155 L 408.103 347.878 M 408.103 347.895 L 404.339 348.053 M 404.339 348.036 L 404.339 351.8 M 404.339 351.871 L 404.399 355.648 M 404.422 355.693 L 400.291 355.874 M 400.156 359.733 L 400.201 355.874 M 400.165 359.764 L 396.11 359.851 M 396.096 359.888 L 396.079 367.981 M 396.079 367.99 L 340.438 367.968 M 340.443 367.981 L 340.334 372.062 M 340.326 372.062 L 299.68 371.908 M 299.68 371.966 L 299.912 352.342 M 299.883 352.342 L 291.295 352.339 M 291.295 352.339 L 291.43 336.483 M 291.453 336.483 L 283.435 336.28 M 284.097 308.24 L 283.423 336.293 M 284.097 308.301 L 275.89 308.301" fill="none" stroke="white" stroke-width="2" />
+                    fill="none" stroke="#00ff00" stroke-width="2" />
+                  </svg>
+            </div>
+            
+            <div id="sticky-modal" class="sticky-modal hidden">
+                <div class="modal-content">
+                    <img src="sticky-note.png" alt="Sticky Note Drawing" style="width: 120%; max-width: 500px; display: block; margin: 0 auto;">
+                    
+                    <div id="task-title">TASKS</div>
+                    
+                    <ul id="task-list">
+                        <li id="task-anomaly">Examine key anomaly video.</li>
+                    </ul>
+                    <button id="close-modal">Close</button>
+                </div>
+            </div>
+            
+            <div class="terminal-content" id="terminal-screen">
+                <input type="text" id="hidden-terminal-input" autofocus autocomplete="off">
+                
+                <video id="terminal-video" src="CITY_SAFETY_ALERT_ANOMALY_0524_ntsc.mp4" style="position: absolute; top: 50%; left: 0.5%; width: 105.2%; height: auto; transform: translateY(-50%); display: none; z-index: 100; pointer-events: none; background-color: #050505;"></video>                
+                <div class="terminal-scroll-area" id="scroll-zone">
+                    <p class="system-line">==================================================</p>
+                    <h1 class="system-header">LATENT ANOMALY RESEARCH AND KINETIC OPERATIONS VECTOR</h1>
+                    <p class="system-line">SYSTEM STATUS: [SECURE_NODE_04_ACTIVE]</p>
+                    <p class="system-line">==================================================</p>
+                    <p class="error-text" style="color: #ff3333;">>>> ANP ALERT: LOGOUT OVERRIDE DETECTED.</p>
+                    <p class="system-text">Target parameters locked. Clearance authentication required to disrupt local transmission loop.</p>
+                    <p class="example-text">INPUT PARAMETER: larkovframework.org/[CLEARANCE_CODE]</p>
+                    <p class="system-line">--------------------------------------------------</p>
+                    
+                    <div id="terminal-history"></div>
+                    
+                    <div class="command-row">
+                        <span class="prompt-symbol">AWAITING_INPUT_NODE04></span>
+                        <span class="user-input-display" id="display-text"></span>
+                        <span class="cursor-block"></span>
+                    </div>
+                </div>
             </div>
         </div>
-        <input type="text" id="hidden-terminal-input" autocomplete="off">
     </div>
-    <script>
-        const hiddenInput = document.getElementById('hidden-terminal-input');
-        const displayText = document.getElementById('display-text');
-        const historyContainer = document.getElementById('terminal-history');
-        const screenContainer = document.getElementById('terminal-screen');
-        const ambientAudio = document.getElementById('terminal-ambient');
-        const viewport = document.getElementById('viewport');
-        
-        hiddenInput.setAttribute('maxlength', '40');
-        hiddenInput.addEventListener('paste', (e) => { e.preventDefault(); });
-        
-        function focusTerminal() { hiddenInput.focus(); }
-        
-        window.addEventListener('DOMContentLoaded', () => { 
-            hiddenInput.focus(); 
-            document.addEventListener('click', () => { hiddenInput.focus(); });
-        });
 
-        function initAudioFeed() {
-            ambientAudio.volume = 0.70;
-            ambientAudio.play().catch(err => {
-                console.log("Audio pipeline sync failure: ", err);
-            });
-            viewport.removeEventListener('click', initAudioFeed);
-        }
-        viewport.addEventListener('click', initAudioFeed);
-        
-        hiddenInput.addEventListener('input', (e) => {
-            let sanitizedValue = e.target.value.replace(/[<>]/g, '');
-            hiddenInput.value = sanitizedValue; displayText.textContent = sanitizedValue; autoScrollScreen();
-        });
-        
-        hiddenInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const userCommand = hiddenInput.value.trim();
-                if (userCommand === '') {
-                    const blankRow = document.createElement('p');
-                    blankRow.className = 'history-line'; blankRow.textContent = `AWAITING_INPUT_NODE04>`;
-                    historyContainer.appendChild(blankRow);
-                } else {
-                    const historicalRow = document.createElement('p');
-                    historicalRow.className = 'history-line';
-                    const lowerCmd = userCommand.toLowerCase();
-                    
-                    const collapsedCmd = lowerCmd.replace(/(.)\1+/g, '$1');
-                    const baseGreetings = ['hi', 'helo', 'hey', 'sup', 'wasup', 'whats up', 'wats up'];
-                    const isGreeting = baseGreetings.some(greet => collapsedCmd.includes(greet)) || lowerCmd.startsWith('h');
-                    
-                    if (lowerCmd === '7143' || lowerCmd === 'help') {
-                        historicalRow.textContent = `NODE04> LINK SYSTEM TO: /7143`;
-                        historicalRow.style.color = '#33ff33';
-                    } else if (isGreeting) {
-                        historicalRow.textContent = `NODE04> I CAN SEE YOU WATCHING.`;
-                        historicalRow.style.color = '#ff3333';
-                    } else {
-                        historicalRow.textContent = `NODE04> ${userCommand} // DENIED`;
-                    }
-                    historyContainer.appendChild(historicalRow);
-                }
-                hiddenInput.value = ''; displayText.textContent = ''; autoScrollScreen();
-            }
-        });
-        
-        function autoScrollScreen() { screenContainer.scrollTop = screenContainer.scrollHeight; }
-    </script>
+    <div class="crt-overlay"></div>
+
+    <script src="script.js" defer></script>
 </body>
 </html>
