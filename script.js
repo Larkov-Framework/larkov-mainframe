@@ -2,47 +2,83 @@
 let tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 let firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+if (firstScriptTag) {
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+} else {
+    document.head.appendChild(tag);
+}
 
 let player;
 window.onYouTubeIframeAPIReady = function() {
     player = new YT.Player('yt-player', {
         height: '100%',
         width: '100%',
-        videoId: 'Hfck2E6kWvg', // YOUR NEW VIDEO ID
-        playerVars: {
-            'playsinline': 1,
-            'rel': 0,
-            'controls': 0,
-            'disablekb': 1,
-            'origin': window.location.origin // CRITICAL FIX FOR LOCAL HOSTING
-        },
-        events: {
-            'onStateChange': onPlayerStateChange,
-            'onError': (event) => {
-                console.error("YouTube Player Error Code:", event.data);
-                // Attempt to force a reload if it fails
-                setTimeout(() => player.loadVideoById('Hfck2E6kWvg'), 2000);
+        videoId: 'Hfck2E6kWvg', 
+        playerVars: { 'playsinline': 1, 'rel': 0, 'controls': 0, 'disablekb': 1, 'origin': window.location.origin },
+        events: { 'onStateChange': onPlayerStateChange }
+    });
+};
+
+// Consolidated keydown controls for both video players
+document.addEventListener('keydown', (e) => {
+    if (terminalVideoContainer.style.display === 'block') {
+        const nativeVid = document.getElementById('native-player');
+        const ytFallbackWrapper = document.getElementById('yt-fallback-wrapper');
+        const key = e.key.toLowerCase();
+        
+        // --- PRIMARY: LOCAL NATIVE VIDEO CONTROLS ---
+        if (nativeVid && nativeVid.style.display === 'block') {
+            switch(key) {
+                case ' ': // Space: Play/Pause
+                    e.preventDefault();
+                    if (nativeVid.paused) {
+                        nativeVid.play();
+                    } else {
+                        nativeVid.pause();
+                    }
+                    break;
+                case 'arrowright': // Forward 10s
+                    e.preventDefault();
+                    nativeVid.currentTime = Math.min(nativeVid.duration, nativeVid.currentTime + 10);
+                    break;
+                case 'arrowleft': // Rewind 10s
+                    e.preventDefault();
+                    nativeVid.currentTime = Math.max(0, nativeVid.currentTime - 10);
+                    break;
+                case 's': // Skip to end
+                    e.preventDefault();
+                    nativeVid.currentTime = nativeVid.duration - 1; 
+                    break;
+            }
+        } 
+        // --- FALLBACK: YOUTUBE CONTROLS ---
+        else if (ytFallbackWrapper && ytFallbackWrapper.style.display === 'block' && player && typeof player.getPlayerState === 'function') {
+            switch(key) {
+                case ' ': // Space: Play/Pause
+                    e.preventDefault();
+                    const state = player.getPlayerState();
+                    if (state === YT.PlayerState.PLAYING) {
+                        player.pauseVideo();
+                    } else {
+                        player.playVideo();
+                    }
+                    break;
+                case 'arrowright': // Forward 10s
+                    e.preventDefault();
+                    player.seekTo(player.getCurrentTime() + 10, true);
+                    break;
+                case 'arrowleft': // Rewind 10s
+                    e.preventDefault();
+                    player.seekTo(player.getCurrentTime() - 10, true);
+                    break;
+                case 's': // Skip to end
+                    e.preventDefault();
+                    player.seekTo(player.getDuration() - 1, true);
+                    break;
             }
         }
-    });
-}
-
-function onPlayerStateChange(event) {
-    const curtain = document.getElementById('video-curtain');
-    // 1. When the video actually starts playing, fade out the curtain
-    if (event.data === YT.PlayerState.PLAYING) {
-        if (curtain) {
-            curtain.style.opacity = '0';
-            setTimeout(() => { curtain.style.display = 'none'; }, 300); // Wait for fade
-        }
     }
-    
-    // 2. When the video ends
-    if (event.data === YT.PlayerState.ENDED) {
-        handleVideoEnded();
-    }
-}
+});
 
 const hiddenInput = document.getElementById('hidden-terminal-input');
 const displayText = document.getElementById('display-text');
@@ -58,11 +94,22 @@ function focusTerminal() {
     hiddenInput.focus();
 }
 
+// STICKY NOTE MODAL LOGIC
+const stickyWrapper = document.querySelector('.sticky-note-wrapper');
+const stickyModal = document.getElementById('sticky-modal');
+const closeModal = document.getElementById('close-modal');
+
 shiftBtn.addEventListener('click', () => {
     ambientAudio.volume = 0.70;
     ambientAudio.play();
     splashScreen.style.opacity = '0';
-    setTimeout(() => { splashScreen.style.display = 'none'; focusTerminal(); }, 500);
+    setTimeout(() => { 
+        splashScreen.style.display = 'none'; 
+        focusTerminal(); 
+        
+        // STICKY NOTE WAKES UP THE INSTANT YOU CLICK "BEGIN SHIFT"
+        stickyWrapper.classList.add('enabled');
+    }, 500);
 });
 
 // Viewport click for terminal focus (ignoring sticky note clicks)
@@ -72,11 +119,6 @@ viewport.addEventListener('click', (e) => {
     }
 });
 
-// STICKY NOTE MODAL LOGIC
-const stickyWrapper = document.querySelector('.sticky-note-wrapper');
-const stickyModal = document.getElementById('sticky-modal');
-const closeModal = document.getElementById('close-modal');
-
 stickyWrapper.addEventListener('click', (e) => {
     e.stopPropagation();
     stickyModal.classList.remove('hidden');
@@ -85,6 +127,7 @@ stickyWrapper.addEventListener('click', (e) => {
 closeModal.addEventListener('click', (e) => {
     e.stopPropagation();
     stickyModal.classList.add('hidden');
+    // Redirect logic removed so you can stay in Node 04 for now
 });
 
 window.addEventListener('click', (e) => {
@@ -119,6 +162,23 @@ hiddenInput.addEventListener('keydown', (e) => {
         const historicalRow = document.createElement('p');
         historicalRow.className = 'history-line';
         
+        // Obscure greetings list
+        const greetings = [
+            'hi', 'hello', 'helo', 'hey', 'sup', 'wasup', 'whats up', 'wats up', 
+            'yo', 'yoski', 'wat up', 'wat up twin', 'whats good' 
+        ];
+        
+        
+        // Strip out any straight or curly apostrophes just for the check
+        const cleanCommand = userCommand.replace(/['’‘]/g, '');
+        
+        // Check against the sanitized command
+        const isGreeting = greetings.some(greet => 
+            cleanCommand === greet || 
+            cleanCommand === greet + '?' || 
+            cleanCommand.startsWith(greet + ' ')
+        );
+        
         if (userCommand === '') {
             historicalRow.textContent = `AWAITING_INPUT_NODE04>`;
             historyContainer.appendChild(historicalRow);
@@ -149,24 +209,75 @@ hiddenInput.addEventListener('keydown', (e) => {
                     
                     terminalVideoContainer.style.display = 'block';
                     
-                    if (player && typeof player.playVideo === 'function') {
-                        player.playVideo();
+                    const nativeVid = document.getElementById('native-player');
+                    const ytFallbackWrapper = document.getElementById('yt-fallback-wrapper');
+                    
+                    // Failsafe: Stops the script from crashing if HTML is missing
+                    if (!nativeVid || !ytFallbackWrapper) {
+                        console.error("CRITICAL ERROR: Missing video HTML elements!");
+                        return;
+                    }
+
+                    // Code 3 = NO_SOURCE (The local file doesn't exist)
+                    if (nativeVid.networkState === 3 || nativeVid.error) {
+                        nativeVid.style.display = 'none';
+                        ytFallbackWrapper.style.display = 'block';
                         
-                        // Failsafe: Drops the curtain automatically after 1.5s just in case YouTube lags
-                        setTimeout(() => {
-                            if (curtain) {
-                                curtain.style.opacity = '0';
-                                setTimeout(() => { curtain.style.display = 'none'; }, 300);
-                            }
-                        }, 1500);
+                        const dropCurtain = () => {
+                            setTimeout(() => {
+                                if (curtain) {
+                                    curtain.style.opacity = '0';
+                                    setTimeout(() => { curtain.style.display = 'none'; }, 300);
+                                }
+                            }, 1500);
+                        };
+
+                        // Bulletproof YouTube initialization
+                        if (player && typeof player.playVideo === 'function') {
+                            player.playVideo();
+                            dropCurtain();
+                        } else if (window.YT && typeof window.YT.Player === 'function') {
+                            player = new YT.Player('yt-player', {
+                                height: '100%', width: '100%', videoId: 'Hfck2E6kWvg',
+                                playerVars: { 'playsinline': 1, 'rel': 0, 'controls': 0, 'disablekb': 1, 'origin': window.location.origin },
+                                events: { 
+                                    'onReady': (e) => { e.target.playVideo(); dropCurtain(); },
+                                    'onStateChange': onPlayerStateChange 
+                                }
+                            });
+                        } else {
+                            console.error("YouTube API failed to load from Google's servers.");
+                        }
+                    } else {
+                        ytFallbackWrapper.style.display = 'none';
+                        nativeVid.style.display = 'block';
+                        
+                        nativeVid.currentTime = 0;
+                        nativeVid.onended = handleVideoEnded; 
+                        
+                        let playPromise = nativeVid.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                setTimeout(() => {
+                                    if (curtain) {
+                                        curtain.style.opacity = '0';
+                                        setTimeout(() => { curtain.style.display = 'none'; }, 300);
+                                    }
+                                }, 500);
+                            }).catch(error => {
+                                console.error("Browser blocked native playback:", error);
+                            });
+                        }
                     }
                 }
             }, 250);
-        } else if (['hi', 'helo', 'hey', 'sup', 'wasup', 'whats up', 'wats up'].some(greet => userCommand.includes(greet)) || userCommand.startsWith('h')) {
+        } else if (isGreeting) {
+            // Only triggers for actual greetings now!
             historicalRow.textContent = `NODE04> I CAN SEE YOU WATCHING.`;
             historicalRow.style.color = '#ff3333';
             historyContainer.appendChild(historicalRow);
         } else {
+            // Everything else gets denied properly
             historicalRow.textContent = `NODE04> ${userCommand} // DENIED`;
             historyContainer.appendChild(historicalRow);
         }
@@ -189,7 +300,6 @@ function handleVideoEnded() {
     msgContainer.className = 'jumping-text';
     document.getElementById('viewport').appendChild(msgContainer);
     document.getElementById('task-anomaly').classList.add('completed');
-
     function renderStep() {
         msgContainer.innerHTML = '';
         const text = steps[currentStep];
@@ -217,28 +327,19 @@ function handleVideoEnded() {
     renderStep(); 
 }
 
-// Custom Terminal Controls mapped to YouTube API
-document.addEventListener('keydown', (e) => {
-    if (terminalVideoContainer.style.display === 'block' && player) {
-        switch(e.key.toLowerCase()) {
-            case ' ': // Space: Play/Pause
-                e.preventDefault();
-                const state = player.getPlayerState();
-                if (state === YT.PlayerState.PLAYING) {
-                    player.pauseVideo();
-                } else {
-                    player.playVideo();
-                }
-                break;
-            case 'arrowright': // Right Arrow: Forward 10s
-                player.seekTo(player.getCurrentTime() + 10, true);
-                break;
-            case 'arrowleft': // Left Arrow: Rewind 10s
-                player.seekTo(player.getCurrentTime() - 10, true);
-                break;
-            case 's': // S: Skip to end
-                player.seekTo(player.getDuration() - 1, true);
-                break;
+function onPlayerStateChange(event) {
+    const curtain = document.getElementById('video-curtain');
+    
+    // 1. When the YouTube video actually starts playing, fade out the curtain
+    if (event.data === YT.PlayerState.PLAYING) {
+        if (curtain) {
+            curtain.style.opacity = '0';
+            setTimeout(() => { curtain.style.display = 'none'; }, 300);
         }
     }
-});
+    
+    // 2. When the YouTube video ends, trigger your text sequence
+    if (event.data === YT.PlayerState.ENDED) {
+        handleVideoEnded();
+    }
+}
