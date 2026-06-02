@@ -1,4 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    /* Responsive custom variables for brute force mask cropping */
+    --yt-mask-width: 130%;
+    --yt-mask-height: 170%;
+    --yt-mask-top: -34%;
+    --yt-mask-left: -16%;
+}
+
 html, body {
     margin: 0; padding: 0; width: 100%; height: 100%;
     background-color: #050505;
@@ -125,14 +134,16 @@ html, body {
 @keyframes block-blink { to { visibility: hidden; } }
 #hidden-terminal-input { position: absolute; opacity: 0; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; cursor: default; }
 
-/* RE-BALANCED EXTENDED CUSTOM TARGET INTERACTION OVERLAYS */
-.sticky-note-hotspot {
+/* YouTube Fallback Cropped Container */
+.yt-mask-layer {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%; z-index: 65; cursor: pointer;
-    clip-path: polygon(21% 31%, 21% 30%, 21% 28%, 21% 22%, 21% 21%, 20% 20%, 17% 20%, 14% 19%, 14% 26%, 15% 27%, 14% 30%, 15% 31%, 15% 33%, 18% 33%, 20% 32%);
-    background: rgba(255, 255, 255, 0.3); transition: background 0.2s ease;
+    width: var(--yt-mask-width);
+    height: var(--yt-mask-height);
+    top: var(--yt-mask-top);
+    left: var(--yt-mask-left);
+    pointer-events: none;
+    display: none;
 }
-.sticky-note-hotspot:hover { background: rgba(255, 255, 255, 0.5); }
 
 /* --- STICKY NOTE CSS REBUILT --- */
 .sticky-note-wrapper {
@@ -141,14 +152,23 @@ html, body {
     left: 14%;
     width: 8%;
     aspect-ratio: 1 / 1;
-    cursor: pointer;
     z-index: 9999;
     opacity: 0;
     transition: opacity 0.3s ease;
     overflow: visible !important;
+    
+    /* Locked by default on the splash screen */
+    pointer-events: none;
+    cursor: default;
 }
 
-.sticky-note-wrapper:hover {
+/* Class active/enabled once terminal "BEGIN SHIFT" is clicked */
+.sticky-note-wrapper.enabled {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.sticky-note-wrapper.enabled:hover {
     opacity: 1;
 }
 
@@ -163,7 +183,7 @@ html, body {
     opacity: 1;
     z-index: 9999;
 }
-.sticky-note-wrapper:hover .glow-path {
+.sticky-note-wrapper.enabled:hover .glow-path {
     stroke-width: 4;
 }
 .glow-path {
@@ -221,6 +241,7 @@ html, body {
 }
 
 .hidden { display: none; }
+
 /* ------------------------------- */
 
 @media screen and (max-width: 932px) and (orientation: landscape) {
