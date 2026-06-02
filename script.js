@@ -139,12 +139,22 @@ window.addEventListener('click', (e) => {
 window.addEventListener('DOMContentLoaded', () => { 
     function triggerGlitch() {
         const uniqueTimestamp = new Date().getTime();
-        viewport.style.backgroundImage = `url('coworker.gif?v=${uniqueTimestamp}')`;
-        viewport.style.backgroundSize = "100% 100%";
-        setTimeout(() => {
-            viewport.style.backgroundImage = "url('ROOM-LF.png')";
+        const glitchUrl = `coworker.gif?v=${uniqueTimestamp}`;
+        
+        // 1. Create an off-screen image object to preload the file
+        const img = new Image();
+        img.src = glitchUrl;
+        
+        // 2. Only swap the background after the image is fully downloaded
+        img.onload = () => {
+            viewport.style.backgroundImage = `url('${glitchUrl}')`;
             viewport.style.backgroundSize = "100% 100%";
-        }, 6500);
+            
+            setTimeout(() => {
+                viewport.style.backgroundImage = "url('ROOM-LF.png')";
+                viewport.style.backgroundSize = "100% 100%";
+            }, 6500);
+        };
     }
     setTimeout(triggerGlitch, 5000);
 });
