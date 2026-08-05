@@ -1,0 +1,145 @@
+.terminal-content {
+    position: absolute; 
+    top: 36.5%; 
+    width: 27.2%; 
+    height: 31.0%;
+    padding: 0.6em 0.8em 0.6em 1.2em;
+    box-sizing: border-box; 
+    display: flex; 
+    flex-direction: column; 
+    color: #33ff33;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); 
+    background-size: 100% 4px;
+    overflow: visible !important;
+}
+.system-header { font-size: 0.95em; font-weight: normal; margin: 0 0 1px 0; line-height: 1.0; letter-spacing: 0.1px; text-transform: uppercase; }
+.system-line { margin: 2px 0; opacity: 0.4; font-size: 0.85em; letter-spacing: -0.5px; line-height: 1.1; }
+.error-text { margin: 2px 0 1px 0; font-weight: normal; font-size: 0.85em; line-height: 1.0; }
+.system-text, .example-text { margin: 4px 0; font-size: 0.8em; line-height: 1.3; }
+#terminal-history { width: 100%; }
+.history-line { margin: 4px 0; font-size: 0.8em; line-height: 1.3; overflow-wrap: break-word; }
+.command-row { 
+    display: block; 
+    width: 100%;       
+    margin-top: 6px; 
+    background: transparent; 
+    box-sizing: border-box;
+    word-break: break-all;
+}
+
+.prompt-symbol { 
+    display: inline;
+    font-size: 0.8em; 
+    margin-right: 3px; 
+}
+
+.user-input-display { 
+    display: inline;
+    font-size: 0.8em; 
+    white-space: pre-wrap; 
+    overflow-wrap: break-word; 
+    color: #33ff33; 
+}
+
+.cursor-block {
+    display: inline-block; 
+    width: 0.35em; 
+    height: 0.65em; 
+    background-color: #33ff33; 
+    margin-left: -6px; /* Pulls the indicator tight against the text */
+    vertical-align: middle;
+    box-shadow: 0 0 4px rgba(51, 255, 51, 0.8); 
+    animation: block-blink 1.0s steps(2, start) infinite;
+}
+.fullscreen-active .terminal-content {
+    left: 35.5%;
+}
+.windowed-active .terminal-content {
+    left: 35.5%;
+}
+.hidden { 
+    display: none !important; 
+}
+#close-modal {
+    display: none !important;
+}
+#sticky-modal:not(.hidden) #close-modal {
+    display: block !important;
+    position: absolute;
+    bottom: 12%;
+    left: 42%;
+    background: #222222;
+    color: #ffa9a9;
+    border: 1px solid #444444;
+    font-family: 'Architects Daughter', cursive, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+#sticky-modal:not(.hidden) #close-modal:hover {
+    background: #333333;
+    border-color: #ffa9a9;
+    color: #ffbaba;
+}
+.terminal-scroll-area {
+    width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; 
+    display: flex; flex-direction: column; scrollbar-width: none;
+}
+.terminal-scroll-area::-webkit-scrollbar { display: none; }
+@keyframes block-blink { to { visibility: hidden; } }
+#hidden-terminal-input { position: absolute; opacity: 0; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; cursor: default; }
+@media screen and (max-width: 932px) and (orientation: landscape) {
+    .terminal-content { padding: 0.4vh 0.6vh; }
+    .system-header { font-size: 0.95vh; } 
+    .system-line, .error-text { font-size: 0.85vh; }
+    .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 0.8vh; }
+    .cursor-block { width: 0.35vh; height: 0.65vh; }
+}
+@media screen and (min-width: 1600px) {
+    .system-header { font-size: 15px; } 
+    .system-line, .error-text { font-size: 14px; }
+    .system-text, .example-text, .history-line, .prompt-symbol, .user-input-display { font-size: 13px; }
+    .cursor-block { width: 6px; height: 12px; }
+}
+
+.fullscreen-active #terminal-video-container {
+    top: 50% !important;  
+    left: 4.5% !important;    
+    width: 104% !important;    
+    height: auto !important; 
+}
+
+.windowed-active #terminal-video-container {
+    top: 50% !important;  
+    left: 4.5% !important;    
+    width: 104% !important;    
+    height: auto !important;  
+}
+#ttt-sticky-note {
+    position: absolute;
+    aspect-ratio: 160 / 140;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    overflow: visible !important;
+}
+
+#ttt-sticky-note:hover {
+    opacity: 1;
+}
+
+.fullscreen-active #ttt-sticky-note {
+    top: 49%;
+    left: 74.7%;
+    width: 7.9%;;
+}
+
+.windowed-active #ttt-sticky-note {
+    top: 49%;
+    left: 74.7%;
+    width: 7.9%;
+}

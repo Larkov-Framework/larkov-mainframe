@@ -1,0 +1,52 @@
+#splash-screen {
+    position: fixed; top: 0;
+    left: 0; width: 100vw; height: 100vh;
+    background-color: #050505; z-index: 100;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    transition: opacity 0.5s ease-out;
+}
+.login-box {
+    text-align: center; border: 2px dashed #33ff33; padding: 2vw 4vw;
+    background: rgba(18, 16, 16, 0.9); box-shadow: 0 0 15px rgba(51, 255, 51, 0.2);
+}
+.splash-title {
+    color: #33ff33;
+    font-size: 2.2vw; margin: 0 0 1.5vw 0;
+    text-shadow: 0 0 5px rgba(51, 255, 51, 0.8); letter-spacing: 1px;
+}
+.shift-btn {
+    background: #33ff33; color: #050505; border: none;
+    font-family: 'VT323', monospace; font-size: 1.8vw; padding: 0.5vw 2vw;
+    cursor: pointer; font-weight: bold; text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(51, 255, 51, 0.5); transition: background 0.2s, transform 0.1s;
+}
+.shift-btn:hover { background: #22cc22; }
+.shift-btn:active { transform: scale(0.95); }
+.shift-btn:focus { outline: none; }
+#reset-save-btn {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 24px;
+    height: 24px;
+    background-color: #222222;
+    color: #888888;
+    border: 1px solid #444444;
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10005;
+    opacity: 0.4;
+    transition: opacity 0.2s, background-color 0.2s;
+    border-radius: 2px;
+}
+#reset-save-btn:hover {
+    opacity: 1.0;
+    background-color: #333333;
+    color: #ffffff;
+}
+.bypass-active #splash-screen {
+    display: none !important;
+    opacity: 0 !important;
+}

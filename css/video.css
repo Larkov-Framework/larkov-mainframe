@@ -1,0 +1,43 @@
+.yt-mask-layer {
+    position: absolute;
+    width: var(--yt-mask-width); height: var(--yt-mask-height);
+    top: var(--yt-mask-top); left: var(--yt-mask-left);
+    pointer-events: none; display: none;
+}
+.completed {
+    text-decoration: line-through; text-decoration-color: #ff0000; opacity: 0.8 !important;
+}
+.jumping-text {
+    position: absolute; 
+    top: 82%;
+    width: 100%; 
+    text-align: center; 
+    color: #ff3333;
+    font-size: 1.8vw;
+    z-index: 200; 
+    pointer-events: auto; 
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(255, 51, 51, 0.5);
+}
+.jumping-text span { 
+    display: inline-block; 
+    animation: jump 2.0s infinite; 
+}
+@keyframes jump { 
+    0%, 100% { transform: translateY(0); } 
+    50% { transform: translateY(-3px); }
+}
+
+.cipher-flash {
+    font-family: monospace;
+    color: #ff1111;
+    font-size: 2vw;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ff0000;
+    animation: rapid-flicker 0.15s infinite alternate;
+}
+
+@keyframes rapid-flicker {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}

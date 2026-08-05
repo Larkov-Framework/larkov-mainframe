@@ -1,0 +1,318 @@
+#ttt-modal .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: scale(var(--ttt-global-scale, 1));
+    transform-origin: center center;
+}
+
+.ttt-grid {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    z-index: 10005;
+}
+
+.ttt-cell {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ttt-cell img {
+    position: absolute;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+#ttt-message {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #ff3333;
+    font-family: monospace;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(255, 51, 51, 0.5);
+}
+
+#close-ttt-modal {
+    position: absolute;
+    background: #222222;
+    color: #ffa9a9;
+    border: 1px solid #444444;
+    font-family: 'Architects Daughter', cursive, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+
+#close-ttt-modal:hover {
+    background: #333333;
+    border-color: #ffa9a9;
+    color: #ffbaba;
+}
+
+#ttt-modal.hidden #close-ttt-modal {
+    display: none !important;
+}
+
+.fullscreen-active #ttt-modal .modal-content {
+    width: 100%;
+    max-width: 500px; 
+    top: 0%;
+    left: 3.5%;
+}
+
+.fullscreen-active .ttt-grid {
+    top: 13%;
+    left: 18%;
+    width: 48%;
+    height: 78%;
+}
+
+.fullscreen-active #ttt-message {
+    left: -7%;
+    bottom: 100%;
+    font-size: 18px;
+}
+
+.fullscreen-active #close-ttt-modal {
+    bottom: -22%;
+    left: 37%;
+}
+
+.fullscreen-active .ttt-cell[data-cell="TOP_LEFT"] img {
+    width: 500%;
+    height: 500%;
+    left: -80%;
+    top: -140%;
+    transform: translate(0px, 0px); 
+}
+
+.fullscreen-active .ttt-cell[data-cell="TOP_MIDDLE"] img {
+    width: 600%;
+    height: 600%;
+    left: -195%;
+    top: -180%;
+    transform: translate(0px, 0px);
+}
+
+.fullscreen-active .ttt-cell[data-cell="TOP_RIGHT"] img {
+    width: 600%;
+    height: 600%;
+    left: -290%;
+    top: -180%;
+    transform: translate(0px, 0px);
+}
+
+.fullscreen-active .ttt-cell[data-cell="MIDDLE_LEFT"] img {
+    width: 600%;
+    height: 600%;
+    left: -110%;
+    top: -260%;
+    transform: translate(0px, 0px);
+}
+
+.fullscreen-active .ttt-cell[data-cell="MIDDLE_MIDDLE"] img {
+    width: 600%;
+    height: 600%;
+    left: -200%;
+    top: -265%;
+    transform: translate(0px, 0px);
+}
+
+.fullscreen-active .ttt-cell[data-cell="MIDDLE_RIGHT"] img {
+    width: 600%;
+    height: 600%;
+    left: -290%;
+    top: -267%;
+    transform: translate(0px, 0px);
+}
+
+.fullscreen-active .ttt-cell[data-cell="BOTTOM_LEFT"] img {
+    width: 600%;
+    height: 600%;
+    left: -115%;
+    top: -350%;
+    transform: translate(0px, 0px);
+}
+
+.fullscreen-active .ttt-cell[data-cell="BOTTOM_MIDDLE"] img {
+    width: 600%;
+    height: 600%;
+    left: -200%;
+    top: -340%;
+    transform: translate(0px, 0px);
+}
+
+.fullscreen-active .ttt-cell[data-cell="BOTTOM_RIGHT"] img {
+    width: 600%;
+    height: 600%;
+    left: -290%;
+    top: -340%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active #ttt-modal .modal-content {
+    width: 100%;
+    max-width: 500px; 
+    top: 0%;
+    left: 3%;
+}
+
+.windowed-active .ttt-grid {
+    top: 13%;
+    left: 18%;
+    width: 48%;
+    height: 78%;
+}
+
+
+.windowed-active #ttt-message {
+    left: -6.5%;
+    bottom: -10%;
+    font-size: 18px;
+}
+
+.windowed-active #ttt-message {
+    bottom: 100%;
+    font-size: 16px;
+}
+
+
+.windowed-active #reset-ttt-btn {
+    bottom: -22% !important;
+    left: calc(30% + var(--ttt-btn-shift-x, 0px)) !important;
+}
+
+.windowed-active #close-ttt-modal {
+    bottom: -22% !important;
+    left: calc(42% + var(--ttt-btn-shift-x, 0px)) !important; /* Forces the 50% to work! */
+}
+
+.windowed-active .ttt-cell[data-cell="TOP_LEFT"] img {
+    width: 500%;
+    height: 500%;
+    left: -80%;
+    top: -140%;
+    transform: translate(0px, 0px); 
+}
+
+.windowed-active .ttt-cell[data-cell="TOP_MIDDLE"] img {
+    width: 600%;
+    height: 600%;
+    left: -195%;
+    top: -180%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active .ttt-cell[data-cell="TOP_RIGHT"] img {
+    width: 600%;
+    height: 600%;
+    left: -290%;
+    top: -180%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active .ttt-cell[data-cell="MIDDLE_LEFT"] img {
+    width: 600%;
+    height: 600%;
+    left: -110%;
+    top: -260%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active .ttt-cell[data-cell="MIDDLE_MIDDLE"] img {
+    width: 600%;
+    height: 600%;
+    left: -200%;
+    top: -265%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active .ttt-cell[data-cell="MIDDLE_RIGHT"] img {
+    width: 600%;
+    height: 600%;
+    left: -290%;
+    top: -267%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active .ttt-cell[data-cell="BOTTOM_LEFT"] img {
+    width: 600%;
+    height: 600%;
+    left: -115%;
+    top: -350%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active .ttt-cell[data-cell="BOTTOM_MIDDLE"] img {
+    width: 600%;
+    height: 600%;
+    left: -200%;
+    top: -340%;
+    transform: translate(0px, 0px);
+}
+
+.windowed-active .ttt-cell[data-cell="BOTTOM_RIGHT"] img {
+    width: 600%;
+    height: 600%;
+    left: -290%;
+    top: -340%;
+    transform: translate(0px, 0px);
+}
+
+:root {
+    --ttt-global-scale: 2.0; 
+}
+/* Add these rules at the very bottom of css/tictactoe.css */
+
+#reset-ttt-btn {
+    position: absolute;
+    background: #222222;
+    color: #ffaa00; /* Amber color to distinguish it from Close */
+    border: 1px solid #444444;
+    font-family: 'Architects Daughter', cursive, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+
+#reset-ttt-btn:hover {
+    background: #333333;
+    border-color: #ffaa00;
+    color: #ffcc66;
+}
+
+.fullscreen-active #reset-ttt-btn {
+    bottom: -22%;
+    left: calc(30% + var(--ttt-btn-shift-x, 0px)); /* Change 28% to adjust Retry individually */
+}
+.fullscreen-active #close-ttt-modal {
+    bottom: -22%;
+    left: calc(42% + var(--ttt-btn-shift-x, 0px)); /* Change 48% to adjust Close individually */
+}
+
+.windowed-active #reset-ttt-btn {
+    bottom: -22%;
+    left: 30%;
+}
+.windowed-active #close-ttt-modal {
+    bottom: -22%;
+    left: 50%; 
+}
+

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>LARKOV MAINFRAME // HOME_STATION_04</title>
+    <link rel="stylesheet" href="css/viewport.css">
+    <style>
+        .bedroom-viewport {
+            width: 100%; height: 100%;
+            background: url('assets/environment/HOME/BEDROOM.png') no-repeat center center;
+            background-size: 100% 100%;
+            position: relative;
+            box-sizing: border-box; cursor: default;
+        }
+        .choice-modal {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease-in-out;
+        }
+        .choice-content {
+            text-align: center;
+            font-family: 'VT323', monospace;
+        }
+        .choice-text {
+            color: #ff3333;
+            font-size: 5vw;
+            text-shadow: 0 0 10px #ff0000;
+            margin-bottom: 1.5em;
+            letter-spacing: 2px;
+            animation: text-pulse 2s infinite alternate ease-in-out;
+        }
+        .choice-buttons {
+            display: flex;
+            gap: 4em;
+            justify-content: center;
+        }
+        .choice-btn {
+            background: #111111;
+            color: #33ff33;
+            border: 1px solid #33ff33;
+            font-family: 'VT323', monospace;
+            font-size: 2vw;
+            padding: 0.2em 1.5em;
+            cursor: pointer;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(51, 255, 51, 0.4);
+            transition: all 0.2s ease;
+        }
+        .choice-btn:hover {
+            background: #33ff33;
+            color: #050505;
+            box-shadow: 0 0 15px #33ff33;
+        }
+        @keyframes text-pulse {
+            0% { opacity: 0.4; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bedroom-ambient" loop>
+        <source src="assets/environment/ambient-void.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="choice-modal" class="choice-modal">
+        <div class="choice-content">
+            <div class="choice-text">help</div>
+            <div class="choice-buttons">
+                <button class="choice-btn" id="btn-ok">OK</button>
+                <button class="choice-btn" id="btn-no">NO</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="viewport-container">
+        <div class="bedroom-viewport" id="viewport">
+        </div>
+    </div>
+    
+    <div class="crt-overlay"></div>
+
+    <script>
+        const btnOk = document.getElementById('btn-ok');
+        const btnNo = document.getElementById('btn-no');
+        const modal = document.getElementById('choice-modal');
+        const ambient = document.getElementById('bedroom-ambient');
+
+        function selectChoice(choice) {
+            localStorage.setItem('helpChoice', choice);
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 1000);
+
+            if (ambient && ambient.paused) {
+                ambient.volume = 0.40;
+                ambient.play().catch(function (err) {
+                    console.log(err);
+                });
+            }
+        }
+
+        btnOk.addEventListener('click', function (e) {
+            e.stopPropagation();
+            selectChoice('ok');
+        });
+
+        btnNo.addEventListener('click', function (e) {
+            e.stopPropagation();
+            selectChoice('no');
+        });
+    </script>
+</body>
+</html>

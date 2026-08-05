@@ -1,0 +1,450 @@
+html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background-color: #050505;
+    display: flex; justify-content: center;
+    align-items: center;
+    overflow: hidden; font-family: 'VT323', monospace;
+    -webkit-text-size-adjust: none; text-size-adjust: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.viewport-container {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;      
+    max-height: 100vh;    
+    max-width: 177.78vh;  
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    font-size: 1vw;
+}
+@media (min-aspect-ratio: 16/9) {
+    .viewport-container {
+        font-size: 1.778vh;
+    }
+}
+.hidden { 
+    display: none !important; 
+}
+#close-modal {
+    display: none !important;
+}
+#sticky-modal:not(.hidden) #close-modal {
+    display: block !important;
+    position: absolute;
+    bottom: 12%;               
+    left: 42%;
+    background: #222222;
+    color: #ffa9a9;
+    border: 1px solid #444444;
+    font-family: 'Architects Daughter', cursive, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+#sticky-modal:not(.hidden) #close-modal:hover {
+    background: #333333;
+    border-color: #ffa9a9;
+    color: #ffbaba;
+}
+.room-viewport {
+    width: 100%; height: 100%;
+    background: url('../assets/environment/ROOM-LF.png') no-repeat center center;
+    background-size: 100% 100%;
+    position: relative;
+    box-sizing: border-box; cursor: default;
+    transition: background-image 0.1s ease-in-out;
+}
+.portal-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('../assets/environment/ROOM-LF(SWIRL).png') no-repeat center center;
+    background-size: 100% 100%; opacity: 0; pointer-events: none;
+    transition: opacity 0.1s ease-in-out; z-index: 55;
+}
+.static-anomaly-link { 
+    position: absolute; 
+    top: 37%; left: 9%; width: 15%; aspect-ratio: 1 / 1;
+    border-radius: 50%; z-index: 60; text-decoration: none; 
+}
+.room-viewport:has(.static-anomaly-link:hover) .portal-overlay { opacity: 1.0; }
+.sticky-note-wrapper {
+    position: absolute; width: 8%; aspect-ratio: 1 / 1; z-index: 9999;
+    opacity: 0; transition: opacity 0.3s ease; overflow: visible !important;
+    pointer-events: none; cursor: default;
+}
+.sticky-note-wrapper.enabled { pointer-events: auto; cursor: pointer; }
+.sticky-note-wrapper.enabled:hover { opacity: 1; }
+.sticky-note {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; overflow: visible !important; z-index: 9999;
+}
+.glow-path {
+    stroke: #33ff33 !important; 
+    stroke-width: 1.5px;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 2px rgba(51, 255, 51, 0.8));
+    transition: all 0.3s ease;
+}
+.sticky-note-wrapper.enabled:hover .glow-path {
+    stroke-width: 2.5px;
+    filter: drop-shadow(0 0 4px rgba(51, 255, 51, 1));
+}
+.sticky-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex; justify-content: center; align-items: center; z-index: 10000;
+}
+.modal-content { 
+    position: relative; width: 100%; max-width: 500px;
+    background: transparent; color: #00ff00; font-family: monospace;
+}
+#task-title {
+    position: absolute; 
+    top: 30.3%;                
+    left: 41%; 
+    color: #9e0000;         
+    font-family: 'Architects Daughter', cursive, sans-serif;
+    font-size: 30px; 
+    font-weight: bold; 
+    text-transform: uppercase;
+    transform: rotate(-1.5deg); 
+    letter-spacing: 2px; 
+    opacity: 0.9;
+    z-index: 10002;
+    pointer-events: none;
+}
+#task-list {
+    position: absolute; 
+    top: 38%;
+    left: 24%; 
+    width: 70%;
+    height: 50%;              
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+    color: #ffffff;         
+    font-family: 'Architects Daughter', cursive, sans-serif; 
+    font-size: 18px; 
+    font-weight: bold;        
+    text-transform: uppercase;
+    transform: rotate(-1.5deg); 
+    letter-spacing: 1px; 
+    opacity: 0.75;            
+}
+#task-anomaly {
+    position: absolute;
+    top: -3%;                  
+    left: 0;
+    font-size: 14px;
+}
+
+#task-miller {
+    position: absolute;
+    top: 10%;                 
+    left: -3%;
+    font-size: 13px;
+}
+
+#task-7029 {
+    position: absolute;
+    top: 20%;                 
+    left: -2%;
+    font-size: 20px;
+}
+
+#task-report {
+    position: absolute;
+    top: 32%;                 
+    left: -5%;
+    font-size: 20px;
+}
+
+#task-clockout {
+    position: absolute;
+    top: 48%;                 
+    left: -4%;
+    font-size: 18px;
+}
+
+#task-hate {
+    position: absolute;
+    top: 63%;                 
+    left: -5%;
+    font-size: 18px;
+}
+.fullscreen-active .sticky-note-wrapper { top: 21%; left: 14%; width: 8%; }
+.windowed-active .sticky-note-wrapper { top: 24.5%; left: 13.8%; width: 7.2%; }
+.coworker-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('../assets/environment/coworker-stare.png') no-repeat center center;
+    background-size: 100% 100%; opacity: 0; pointer-events: none;
+    transition: opacity 0.15s ease-in-out; z-index: 35;
+}
+.room-viewport:has(.static-coworker-link:hover) .coworker-overlay {
+    opacity: 1.0;
+}
+.static-coworker-link {
+    position: absolute; border: none; background: transparent;
+    border-radius: 50%; cursor: pointer; z-index: 60;
+}
+.static-coworker-link:focus { outline: none; }
+.fullscreen-active .static-coworker-link {
+    top: 15%; left: 76%; width: 12%; aspect-ratio: 1 / 1;
+}
+.windowed-active .static-coworker-link {
+    top: 15%;
+    left: 76%;
+    width: 12%;
+    aspect-ratio: 1 / 1;
+}
+.windowed-active .sticky-note-wrapper {
+    top: 21%;
+    left: 14%;
+    width: 8%;
+}
+.hidden, 
+#sticky-modal.hidden, 
+#sticky-modal.hidden * {
+    display: none !important;
+}
+.room-viewport.zoomed-active {
+    transform-origin: 91% 20%; 
+    transform: scale(3.5);     
+    transition: transform 7.5s cubic-bezier(0.7, 0, 0.84, 0); 
+}
+.viewport-container.shaking-level-1 {
+    animation: viewport-shake-light 0.6s infinite;
+}
+.viewport-container.shaking-level-2 {
+    animation: viewport-shake-medium 0.35s infinite;
+}
+.viewport-container.shaking-level-3 {
+    animation: viewport-shake-heavy 0.15s infinite;
+}
+@keyframes viewport-shake-light {
+    0%, 100% { transform: translate(1px, 0.5px) rotate(0deg); }
+    25% { transform: translate(-0.5px, -1px) rotate(0deg); }
+    50% { transform: translate(-1px, 0px) rotate(0.2deg); }
+    75% { transform: translate(0.5px, 1px) rotate(-0.2deg); }
+}
+@keyframes viewport-shake-medium {
+    0%, 100% { transform: translate(2px, 1px) rotate(0deg); }
+    25% { transform: translate(-1.5px, -2px) rotate(-0.5deg); }
+    50% { transform: translate(-2px, 0px) rotate(0.5deg); }
+    75% { transform: translate(1.5px, 2px) rotate(-0.5deg); }
+}
+@keyframes viewport-shake-heavy {
+    0%, 100% { transform: translate(3px, 2px) rotate(0deg); }
+    10% { transform: translate(-2px, -3px) rotate(-1.5deg); }
+    20% { transform: translate(-4px, 0px) rotate(1.5deg); }
+    30% { transform: translate(0px, 3px) rotate(0deg); }
+    40% { transform: translate(3px, -2px) rotate(1.5deg); }
+    50% { transform: translate(-2px, 3px) rotate(-1.5deg); }
+    60% { transform: translate(-4px, 2px) rotate(0deg); }
+    70% { transform: translate(3px, 2px) rotate(-1.5deg); }
+    80% { transform: translate(-2px, -2px) rotate(1.5deg); }
+    90% { transform: translate(3px, 3px) rotate(0deg); }
+}
+.cinematic-active .static-coworker-link,
+.cinematic-active .static-anomaly-link,
+.cinematic-active .static-punchclock-link,
+.cinematic-active .sticky-note-wrapper {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+.jumping-text.interactive {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+.chaotic-text-1 { font-size: 3vw; color: #ff3333; }
+.chaotic-text-2 { font-size: 4.8vw; color: #ff1111; font-weight: bold; text-shadow: 0 0 12px #ff0000; }
+.chaotic-text-3 { font-size: 7.2vw; color: #ff0000; font-weight: 900; text-transform: uppercase; text-shadow: 0 0 25px #ff0000; }
+.chaotic-text-quiet { font-size: 2.2vw; color: #888888; font-style: italic; text-shadow: none;}
+#settings-container {
+    position: fixed;
+    bottom: 15px;
+    right: 45px;
+    z-index: 10005;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+}
+#settings-toggle-btn {
+    width: 24px;
+    height: 24px;
+    background-color: #222222;
+    color: #888888;
+    border: 1px solid #444444;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.4;
+    transition: opacity 0.2s, background-color 0.2s, color 0.2s;
+}
+#settings-toggle-btn:hover {
+    opacity: 1.0;
+    background-color: #333333;
+    color: #33ff33;
+}
+#settings-panel {
+    background-color: rgba(18, 16, 16, 0.95);
+    border: 1px solid #33ff33;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(51, 255, 51, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+.settings-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+.settings-label {
+    color: #33ff33;
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 70px;
+    height: 4px;
+    background: #444444;
+    outline: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 8px;
+    height: 12px;
+    background: #33ff33;
+    border-radius: 1px;
+    box-shadow: 0 0 4px #33ff33;
+}
+#volume-slider::-moz-range-thumb {
+    width: 8px;
+    height: 12px;
+    background: #33ff33;
+    border-radius: 1px;
+    border: none;
+    box-shadow: 0 0 4px #33ff33;
+}
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.03), rgba(0, 0, 255, 0.05));
+    background-size: 100% 6px, 6px 100%;
+    z-index: 999999;
+    pointer-events: none;
+    opacity: 0.95;
+}
+
+:root {
+    --vhs-opacity: 0.15; 
+}
+
+#vhs-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: var(--vhs-opacity);
+    pointer-events: none;
+    z-index: 99998;
+}
+
+.punchclock-overlay {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: url('../assets/environment/end_shift.png') no-repeat center center;
+    background-size: 100% 100%; 
+    opacity: 0; 
+    pointer-events: none;
+    transition: opacity 0.15s ease-in-out; 
+    z-index: 34;
+}
+
+.room-viewport:has(.static-punchclock-link:hover) .punchclock-overlay {
+    opacity: 1.0;
+}
+
+.static-punchclock-link {
+    position: absolute; 
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer; 
+    z-index: 60;
+}
+
+.static-punchclock-link:focus { 
+    outline: none; 
+}
+
+.fullscreen-active .static-punchclock-link {
+     top: 21.7%;
+    left: 57.25%;
+    width: 2.7%;
+    height: 8%;  
+}
+
+.windowed-active .static-punchclock-link {
+    top: 21.7%;
+    left: 57.25%;
+    width: 2.7%;
+    height: 8%;
+}
+
+.cinematic-active .static-coworker-link,
+.cinematic-active .static-anomaly-link,
+.cinematic-active .static-punchclock-link,
+.cinematic-active .sticky-note-wrapper {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+.cutscene-overlay {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100vw; 
+    height: 100vh;
+    background-color: #000000;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999999;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.cutscene-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
