@@ -215,7 +215,7 @@ if (punchclockTrigger) {
                 const cutsceneVideo = document.getElementById('cutscene-player');
                 
                 if (cutscene && cutsceneVideo) {
-                    cutsceneVideo.src = 'assets/environment/HOME/nighty.mp4';
+                    cutsceneVideo.src = 'assets/environment/HOME/nighty.webm';
                     cutsceneVideo.style.display = 'block';
                     cutscene.classList.add('active');
                     cutsceneVideo.play();
